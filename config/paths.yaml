@@ -1,0 +1,5 @@
+paths:
+  urdf_file: "[h1.urdf file's absolute path]" # Type in your h1.urdf file's absolute path
+  scene_file: "[scene.xml file's absolute path]" # Type in your scene.xml file's absolute path
+  old_mesh_dir: "/home/franktsao/dev_ws/src/mj2rviz/urdf/meshes" # Don't change this line !!!
+  new_mesh_dir: "[meshes folder's absolute path]" # Type in your meshes folder's absolute path
