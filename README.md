@@ -37,19 +37,27 @@ Step 3: 配置 config 文件夹里的 paths.yaml 文件 Configure the paths.yaml
 将 [ ] 中的内容替换为当前文件的绝对路径，old_mesh_dir 行内容请勿更改！
 Replace the contents inside [ ] with the absolute path to the current file. Do not modify the old_mesh_dir line!
 
-Step 4: 运行 config 文件夹里的 formater.py Run the formater.py script in the config folder
+Step 4: 运行 config 文件夹里的 formater.py !!! Run the formater.py script in the config folder !!!
 
 Step 5: 运行ROS 2 Humble 版本的环境设置脚本(如果此命令之前没有添加到~/.bashrc) Run ROS 2 Humble environment setup script(if this commond has not been added to ~/.bashrc before)
 
-    source /opt/ros/humble/setup.bash
+    source ~/ros2_ws/install/setup.bash
 
-Step 6: 编译 mj2rviz 包 Build the mj2rviz package
+Step 6: 安装缺少的包和依耐 install packages and dependencies
+
+    sudo apt update
+    sudo apt install ros-humble-joint-state-publisher-gui
+    pip install -r requirements.txt
+
+Step 7: 编译 mj2rviz 包 Build the mj2rviz package
 
     colcon build --packages-select mj2rviz
 
-Step 7: 运行 ROS2 启动命令 Run the ROS2 launch command
+Step 8: 运行 ROS2 启动命令 Run the ROS2 launch command
 
     ros2 launch mj2rviz state_pub_launch.py
+    
+Note: 请确保所有的项目依耐已正确安装
 
 Node diagram:
     ![rosgraph](https://github.com/user-attachments/assets/e8f3aba1-f23f-4146-bda1-f0f6779cb85b)
