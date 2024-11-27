@@ -74,7 +74,23 @@ class H1MujocoController(Node):
 
         # Set up a ROS timer for updating simulation
         self.timer = self.create_timer(0.1, self.update)
-
+        
+    def set_joint_target(self, joint_name, target_position):
+        """Set target position for a specific joint."""
+        # 遍历找到与 joint_name 对应的 actuator
+        for actuator_id in range(self.model.nu):
+            # actuator_trnid 第一列是关节 ID
+            joint_id = self.model.actuator_trnid[actuator_id][0]
+            if joint_id == mujoco.mj_name2id(self.model, mujoco.mjtObj.mjOBJ_JOINT, joint_name):
+                # 找到 actuator 对应的关节
+                # print(f"Setting control for Joint {joint_name} (Actuator Index: {actuator_id}) to {target_position}")
+                self.data.ctrl[actuator_id] = target_position * (180.0 / math.pi)
+                return  # 成功后退出
+        # 如果没有找到匹配的 actuator
+        self.get_logger().warn(f"No actuator found for Joint {joint_name}")
+        
+    '''以下是老版本的给关节发送控制命令的代码，但是在控制关节与关节名称的顺序不一致时会出现问题
+    	down below is the old version, bug occurs when the order in ctrl[] is not in consistence with joint_name    
     def set_joint_target(self, joint_name, target_position):
         """Set target position for a specific joint."""
         joint_id = mujoco.mj_name2id(self.model, mujoco.mjtObj.mjOBJ_JOINT, joint_name)
@@ -85,7 +101,7 @@ class H1MujocoController(Node):
 
             self.data.ctrl[joint_id - 1] = target_position * (180.0 / math.pi)
         else:
-            self.get_logger().warn(f"Joint {joint_name} ID not found or exceeds control limit.")
+            self.get_logger().warn(f"Joint {joint_name} ID not found or exceeds control limit.")'''
     
     def tf_callback(self, msg):
         # 更新原始 TF 数据
