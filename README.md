@@ -91,10 +91,10 @@ In this project, I used Fusion360 throughout for component assembly and export. 
 
 ## 2.装配模型时的注意事项 Precautions during model assembly
 
-1. 模型的站立方向与世界坐标系的 Z 方向一致 Ensure the model's standing direction aligns with the Z-axis of the world coordinate system.
-2. 每一个关联关节不能有嵌套关系。链接方式必须是 a->b->c->d，不可以是 a->(b->c->d)。 Each joint connection must not have nested relationships. The linking must be a->b->c->d, not a->(b->c->d).
-3. 每个关节的自由度不能大于 2，我全程采用 revolute joint。 Each joint must have no more than 2 degrees of freedom. I used revolute joints throughout.
-4. **重要！装配后的模型必须高于 Z0 平面，否则导出 URDF 文件时会报错。** **Critical! Ensure the assembled model is above the Z0 plane; otherwise, exporting to a URDF file will cause errors.**
+1. 模型的站立方向与世界坐标系的 Z 方向一致     Ensure the model's standing direction aligns with the Z-axis of the world coordinate system.
+2. 每一个关联关节不能有嵌套关系。链接方式必须是 a->b->c->d，不可以是 a->(b->c->d)。     Each joint connection must not have nested relationships. The linking must be a->b->c->d, not a->(b->c->d).
+3. 每个关节的自由度不能大于 2，我全程采用 revolute joint。     Each joint must have no more than 2 degrees of freedom. I used revolute joints throughout.
+4. **重要！装配后的模型必须高于 Z0 平面，否则导出 URDF 文件时会报错。    ** **Critical! Ensure the assembled model is above the Z0 plane; otherwise, exporting to a URDF file will cause errors.**
    
 完成的装配模型大致如下：
 The completed assembly model looks like this:
@@ -123,9 +123,9 @@ You can use tools such as Blender or Meshlab for file format conversion and stl 
 1. 找到 URDF 文件中的根基零件。它的名字通常是 base_link，但在您的项目中可能有其他命名，例如 "EB"。
 Locate the base component in the URDF file. Its name is typically base_link, but in your project, it might have a different name, such as "EB".
 
-2. 根基零件是所有其他零件的父级零件，决定了机器人相对于世界坐标系的位置和关系。**删除根基零件的 <inertia> 部分，仅保留 <visual> 和 <collision> 部分。** 如果未删除 <inertia>，RViz 无法加载该 URDF 文件。
+2. 根基零件是所有其他零件的父级零件，决定了机器人相对于世界坐标系的位置和关系。**删除根基零件的 Tag: inertia 部分，仅保留 Tag: visual 和 Tag: collision 部分。** 如果未删除 <inertia>，RViz 无法加载该 URDF 文件。
 The base component is the parent of all other components and determines the robot's position and relationship to the world coordinate system.
-**Remove the <inertia> section for the base component and retain only the <visual> and <collision> sections.** If <inertia> is not removed, RViz will fail to load the URDF file.
+**Remove the Tag :inertia section for the base component and retain only the Tag: visual and Tag: collision sections.** If <inertia> is not removed, RViz will fail to load the URDF file.
 
 ## 6. 使用 Mujoco 转换为 XML 并添加控制器 (Convert to XML with Mujoco and Add Controllers)
 
