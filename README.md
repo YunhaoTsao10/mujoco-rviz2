@@ -108,54 +108,44 @@ After assembly, use the installed plugin to export the URDF file:
 
 ## 4. STL 文件转化与路径修改 (STL to DAE Conversion and Path Modification)
 
-导出 URDF 文件后，打开文件检查 filename 标签引用的文件路径。默认情况下，URDF 文件中引用的是 .stl 格式文件。
-
+1. 导出 URDF 文件后，打开文件检查 filename 标签引用的文件路径。默认情况下，URDF 文件中引用的是 .stl 格式文件。
 After exporting the URDF file, open it and check the filename tag for referenced file paths. By default, the URDF file references .stl files.
 
-为了增强兼容性，需要将 meshes 文件夹中的 .stl 模型转换为 .dae 格式，同时在 URDF 文件中将对应路径更新为 .dae 文件路径。
-
+2. 为了增强兼容性，需要将 meshes 文件夹中的 .stl 模型转换为 .dae 格式，同时在 URDF 文件中将对应路径更新为 .dae 文件路径。
 For better compatibility, convert the .stl models in the meshes folder to .dae format, and update the corresponding file paths in the URDF file to reference the .dae files.
 
-注意：保留原始的 .stl 模型文件，**不要删除**。后续 XML 文件需要使用这些 .stl 文件。可以使用工具（例如 Blender 或 Meshlab）完成文件格式转换和模型编辑，**Mujoco对于单个stl模型的要求是面数不能高于100000**。
-
-Note: Keep the original .stl model files; **do not delete them**. These .stl files will be required later for the XML file.
+3. 保留原始的 .stl 模型文件，**不要删除**。后续 XML 文件需要使用这些 .stl 文件。可以使用工具（例如 Blender 或 Meshlab）完成文件格式转换和模型编辑，**Mujoco对于单个stl模型的要求是面数不能高于100000**。
+Keep the original .stl model files; **do not delete them**. These .stl files will be required later for the XML file.
 You can use tools such as Blender or Meshlab for file format conversion and stl model editing, **Mujoco only allows a single stl model with faces fewer than 100000**.
 
 ## 5. 修改根基零件的惯性描述 (Modify Base Component's Inertia Description)
 
-找到 URDF 文件中的根基零件。它的名字通常是 base_link，但在您的项目中可能有其他命名，例如 "EB"。
-
+1. 找到 URDF 文件中的根基零件。它的名字通常是 base_link，但在您的项目中可能有其他命名，例如 "EB"。
 Locate the base component in the URDF file. Its name is typically base_link, but in your project, it might have a different name, such as "EB".
 
-关键点：根基零件是所有其他零件的父级零件，决定了机器人相对于世界坐标系的位置和关系。**删除根基零件的 <inertia> 部分，仅保留 <visual> 和 <collision> 部分。** 如果未删除 <inertia>，RViz 无法加载该 URDF 文件。
-
+2. 根基零件是所有其他零件的父级零件，决定了机器人相对于世界坐标系的位置和关系。**删除根基零件的 <inertia> 部分，仅保留 <visual> 和 <collision> 部分。** 如果未删除 <inertia>，RViz 无法加载该 URDF 文件。
 The base component is the parent of all other components and determines the robot's position and relationship to the world coordinate system.
 **Remove the <inertia> section for the base component and retain only the <visual> and <collision> sections.** If <inertia> is not removed, RViz will fail to load the URDF file.
 
 ## 6. 使用 Mujoco 转换为 XML 并添加控制器 (Convert to XML with Mujoco and Add Controllers)
 
 将修改完成的 URDF 文件通过 Mujoco 提供的 compile 脚本转换为 XML 文件：
-
 Use Mujoco's compile script to convert the modified URDF file into an XML file:
 
-<path_to_mujoco_bin>/compile <path_to_urdf_file> <output_xml_file>
+    <path_to_mujoco_bin>/compile <path_to_urdf_file> <output_xml_file>
 
 转换完成后，请按以下步骤完善 XML 文件：
-
 After conversion, complete the XML file with the following steps:
 
 ### 添加控制器 (<actuator>)
 为机器人模型的关节添加控制器（例如电机）。具体配置方法请参考 Mujoco 官方文档。
-
 Add actuators (e.g., motors) for the robot's joints. Refer to the Mujoco documentation for detailed configuration.
 
 ### 忽视间隙碰撞 (<contact exclude>)
-在 XML 文件中，可以通过 <contact> 标签使用 <exclude> 子标签忽视因模型间隙引发的非正常碰撞问题。
-
-Use <contact> with <exclude> tags in the XML file to ignore abnormal collisions caused by model gaps.
-手动添加根基零件的 <body> 标签
+在 XML 文件中，可以通过 <contact> 标签使用 <exclude> 子标签忽视因模型间隙引发的非正常碰撞问题。手动添加根基零件的 <body> 标签
 默认情况下，URDF 转换生成的根基零件只有 <geom> 描述，而没有 <body> 标签。为了明确根基零件相对于世界坐标系的初始位置，您需要手动添加 <body> 标签，并将其设置为 6 自由度的 freejoint：
 
+Use <contact> with <exclude> tags in the XML file to ignore abnormal collisions caused by model gaps.
 By default, the URDF-to-XML conversion generates only a <geom> description for the base component without a <body> tag. To define the base component's initial position relative to the world coordinate system, manually add a <body> tag and set it as a 6-DOF freejoint:
 
 <img width="734" alt="截屏2024-11-28 20 27 17" src="https://github.com/user-attachments/assets/e480874c-8525-4a3a-931e-9661acf11472">
@@ -169,14 +159,16 @@ In this project, its position is (0m, 0m, 1.6m).
 ### pub_test 节点
 pub_test 节点的内容无需更改。
 No changes are required for the pub_test node.
+
 ### simulation 节点
 simulation 节点需要注意以下事项：
 For the simulation node, ensure the following:
-发布的 /mujoco_joint_state 话题的数据结构（包括关节数量和名称）必须与 joint_state_publisher 节点发布的 /joint_state 话题完全一致。
+
+1. 发布的 /mujoco_joint_state 话题的数据结构（包括关节数量和名称）必须与 joint_state_publisher 节点发布的 /joint_state 话题完全一致。
 The /mujoco_joint_state topic published by this node must have the same structure (including joint count and names) as the /joint_state topic published by the joint_state_publisher node.
-/mujoco_tf 话题的数据结构应与 joint_state_publisher 节点的 /tf 话题一致。此外，还需要增加根基零件与世界坐标系 world 的 TF 关系。
+2. /mujoco_tf 话题的数据结构应与 joint_state_publisher 节点的 /tf 话题一致。此外，还需要增加根基零件与世界坐标系 world 的 TF 关系。
 The /mujoco_tf topic should have the same structure as the /tf topic from the joint_state_publisher node. Additionally, include the TF relationship between the base component and the world coordinate frame.
-如果发现不一致，需根据项目的 XML 模型结构修改 simulation.py 文件中的相关代码。
+3. 如果发现不一致，需根据项目的 XML 模型结构修改 simulation.py 文件中的相关代码。
 If inconsistencies are found, update the relevant code in simulation.py based on your project's XML model structure.
 
 # 调试工具 (Debugging Tools)
