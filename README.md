@@ -143,22 +143,24 @@ Use Mujoco's compile script to convert the modified URDF file into an XML file:
 转换完成后，请按以下步骤完善 XML 文件：
 After conversion, complete the XML file with the following steps:
 
-添加控制器 (<actuator>)
+### 添加控制器 (<actuator>)
 为机器人模型的关节添加控制器（例如电机）。具体配置方法请参考 Mujoco 官方文档。
 Add actuators (e.g., motors) for the robot's joints. Refer to the Mujoco documentation for detailed configuration.
-忽视间隙碰撞 (<contact exclude>)
+
+### 忽视间隙碰撞 (<contact exclude>)
 在 XML 文件中，可以通过 <contact> 标签使用 <exclude> 子标签忽视因模型间隙引发的非正常碰撞问题。
 Use <contact> with <exclude> tags in the XML file to ignore abnormal collisions caused by model gaps.
 手动添加根基零件的 <body> 标签
 默认情况下，URDF 转换生成的根基零件只有 <geom> 描述，而没有 <body> 标签。为了明确根基零件相对于世界坐标系的初始位置，您需要手动添加 <body> 标签，并将其设置为 6 自由度的 freejoint：
 By default, the URDF-to-XML conversion generates only a <geom> description for the base component without a <body> tag. To define the base component's initial position relative to the world coordinate system, manually add a <body> tag and set it as a 6-DOF freejoint:
+
 <img width="734" alt="截屏2024-11-28 20 27 17" src="https://github.com/user-attachments/assets/e480874c-8525-4a3a-931e-9661acf11472">
 
   
 例如，在此项目中，其位置为 (0m, 0m, 1.6m)。
 In this project, its position is (0m, 0m, 1.6m).
 
-节点代码部分 (Node Code Section)
+## 节点代码部分 (Node Code Section)
 
 pub_test 节点
 pub_test 节点的内容无需更改。
