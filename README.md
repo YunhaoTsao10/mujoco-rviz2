@@ -152,9 +152,9 @@ Use <contact> with <exclude> tags in the XML file to ignore abnormal collisions 
 手动添加根基零件的 <body> 标签
 默认情况下，URDF 转换生成的根基零件只有 <geom> 描述，而没有 <body> 标签。为了明确根基零件相对于世界坐标系的初始位置，您需要手动添加 <body> 标签，并将其设置为 6 自由度的 freejoint：
 By default, the URDF-to-XML conversion generates only a <geom> description for the base component without a <body> tag. To define the base component's initial position relative to the world coordinate system, manually add a <body> tag and set it as a 6-DOF freejoint:
-    <body name="EB" pos="0 0 1.6">
-      <joint name="free_joint" type="free"/>
-    </body>
+<img width="734" alt="截屏2024-11-28 20 27 17" src="https://github.com/user-attachments/assets/e480874c-8525-4a3a-931e-9661acf11472">
+
+  
 例如，在此项目中，其位置为 (0m, 0m, 1.6m)。
 In this project, its position is (0m, 0m, 1.6m).
 
