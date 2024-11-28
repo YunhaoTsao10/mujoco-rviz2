@@ -1,5 +1,4 @@
-# Step 1: 创建工作空间并克隆 mj2rviz 仓库
-# Create a workspace and clone the mj2rviz repository
+# Step 1: 创建工作空间并克隆 mj2rviz 仓库 Create a workspace and clone the mj2rviz repository
 
 确保你已经在 ROS2 工作空间的 src 文件夹下。例如：
 Make sure you're in the src folder of your ROS2 workspace. For example:
@@ -12,8 +11,7 @@ Clone the mj2rviz repository:
 
     git clone https://github.com/YunhaoTsao10/mujoco-rviz2.git mj2rviz
     
-# Step 2: 编辑 .bashrc 文件
-# Edit the .bashrc file
+# Step 2: 编辑 .bashrc 文件 Edit the .bashrc file
 
 打开 .bashrc 文件进行编辑：
 Open the .bashrc file for editing:
@@ -36,37 +34,31 @@ Refresh the environment variables:
 
     source ~/.bashrc
     
-# Step 3: 配置 config 文件夹里的 paths.yaml 文件
-# Configure the paths.yaml file in the config folder
+# Step 3: 配置 config 文件夹里的 paths.yaml 文件 Configure the paths.yaml file in the config folder
 
 将 [ ] 中的内容替换为当前文件的绝对路径，old_mesh_dir 行内容请勿更改！
 Replace the contents inside [ ] with the absolute path to the current file. Do not modify the old_mesh_dir line!
 
-# Step 4: 运行 config 文件夹里的 formater.py
-# Run the formater.py script in the config folder
+# Step 4: 运行 config 文件夹里的 formater.py Run the formater.py script in the config folder
 
-# Step 5: 运行 ROS 2 Humble 版本的环境设置脚本
-# Run the ROS 2 Humble environment setup script
+# Step 5: 运行 ROS 2 Humble 版本的环境设置脚本 Run the ROS 2 Humble environment setup script
 
 如果此命令之前没有添加到 ~/.bashrc：
 If this command has not been added to ~/.bashrc before:
 
     source ~/ros2_ws/install/setup.bash
     
-# Step 6: 安装缺少的包和依赖
-# Install packages and dependencies
+# Step 6: 安装缺少的包和依赖 Install packages and dependencies
 
     sudo apt update
     sudo apt install ros-humble-joint-state-publisher-gui
     pip install -r requirements.txt
     
-# Step 7: 编译 mj2rviz 包
-# Build the mj2rviz package
+# Step 7: 编译 mj2rviz 包 Build the mj2rviz package
 
     colcon build --packages-select mj2rviz
     
-# Step 8: 运行 ROS2 启动命令
-# Run the ROS2 launch command
+# Step 8: 运行 ROS2 启动命令 Run the ROS2 launch command
 
     ros2 launch mj2rviz state_pub_launch.py
     
@@ -75,17 +67,14 @@ If this command has not been added to ~/.bashrc before:
 ## Make sure all project dependencies are correctly installed!
 
 # Node Diagram 节点图
-
-    ![rosgraph](https://github.com/user-attachments/assets/e8f3aba1-f23f-4146-bda1-f0f6779cb85b)
+![rosgraph](https://github.com/user-attachments/assets/e8f3aba1-f23f-4146-bda1-f0f6779cb85b)
 
 # Demo with Unitree H1 宇树h1示例
-
-    ![demo](https://github.com/user-attachments/assets/6b5b5a60-3bc3-4cb6-b123-2d8a5c511551)
+![demo](https://github.com/user-attachments/assets/6b5b5a60-3bc3-4cb6-b123-2d8a5c511551)
 
 # Demo with my Exoskeleton Project 我的外骨骼项目示例
 # The source code for this project will NOT be open-sourced
-
-    ![demo_exoskeleton](https://github.com/user-attachments/assets/c9d5dab1-6348-43e8-80ac-43bc81c67d14)
+![demo_exoskeleton](https://github.com/user-attachments/assets/c9d5dab1-6348-43e8-80ac-43bc81c67d14)
 
 # 在使用自己项目的模型时生成urdf与对应xml文件的过程是少不了的，然而自己生成的模型描述文件与开源的Unitree h1的可能会有差别。下面我会对我进行urdf文件生成的过程进行简单描述：
 # The process of generating URDF and XML files for your project’s model is essential. Compared to open-source models like Unitree H1, there might be differences in the model description files. Below is a step-by-step guide to creating a URDF file for your project:
@@ -98,8 +87,7 @@ You can use industrial design software such as Catia, Creo, UG, SolidWorks, or F
     
 此项目中，我全程使用的是 Fusion360 进行零部件装配与导出。可以在 Fusion360 的官方插件库中搜索 “urdf” 关键词找到插件。安装完插件后如下：
 In this project, I used Fusion360 throughout for component assembly and export. You can find the plugin by searching for "urdf" in the Fusion360 official plugin library. After installation, it looks like this:
-
-   <img width="342" alt="1" src="https://github.com/user-attachments/assets/22fac213-d48a-41db-b685-7b5022ca624b">
+<img width="342" alt="1" src="https://github.com/user-attachments/assets/22fac213-d48a-41db-b685-7b5022ca624b">
 
 ## 2.装配模型时的注意事项
 ## Precautions during model assembly
@@ -114,16 +102,14 @@ Each joint must have no more than 2 degrees of freedom. I used revolute joints t
 **Critical! Ensure the assembled model is above the Z0 plane; otherwise, exporting to a URDF file will cause errors.**
 完成的装配模型大致如下：
 The completed assembly model looks like this:
-
-    <img width="640" alt="2" src="https://github.com/user-attachments/assets/93994f0d-e353-479d-a936-fd8679d5493e">
+<img width="640" alt="2" src="https://github.com/user-attachments/assets/93994f0d-e353-479d-a936-fd8679d5493e">
 
 ## 3.导出 URDF 文件
 ## Export the URDF file
 
 装配完成后，使用先前安装的插件导出 URDF 文件：
 After assembly, use the installed plugin to export the URDF file:
-
-    <img width="318" alt="3" src="https://github.com/user-attachments/assets/c11b8afe-faa1-45e9-a893-5b3363fd5128">
+<img width="318" alt="3" src="https://github.com/user-attachments/assets/c11b8afe-faa1-45e9-a893-5b3363fd5128">
 
 ## 4. STL 文件转化与路径修改 (STL to DAE Conversion and Path Modification)
 
