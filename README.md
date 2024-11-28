@@ -39,9 +39,9 @@ Refresh the environment variables:
 将 [ ] 中的内容替换为当前文件的绝对路径，old_mesh_dir 行内容请勿更改！
 Replace the contents inside [ ] with the absolute path to the current file. Do not modify the old_mesh_dir line!
 
-# Step 4: 运行 config 文件夹里的 formater.py Run the formater.py script in the config folder
+### Step 4: 运行 config 文件夹里的 formater.py Run the formater.py script in the config folder
 
-# Step 5: 运行 ROS 2 Humble 版本的环境设置脚本 Run the ROS 2 Humble environment setup script
+### Step 5: 运行 ROS 2 Humble 版本的环境设置脚本 Run the ROS 2 Humble environment setup script
 
 如果此命令之前没有添加到 ~/.bashrc：
 If this command has not been added to ~/.bashrc before:
@@ -62,9 +62,7 @@ If this command has not been added to ~/.bashrc before:
 
     ros2 launch mj2rviz state_pub_launch.py
     
-## 注意 (Note):
-## 请确保所有的项目依赖已正确安装！
-## Make sure all project dependencies are correctly installed!
+## 注意 (Note):请确保所有的项目依赖已正确安装！Make sure all project dependencies are correctly installed!
 
 # Node Diagram 节点图
 ![rosgraph](https://github.com/user-attachments/assets/e8f3aba1-f23f-4146-bda1-f0f6779cb85b)
@@ -72,25 +70,22 @@ If this command has not been added to ~/.bashrc before:
 # Demo with Unitree H1 宇树h1示例
 ![demo](https://github.com/user-attachments/assets/6b5b5a60-3bc3-4cb6-b123-2d8a5c511551)
 
-# Demo with my Exoskeleton Project 我的外骨骼项目示例
-# The source code for this project will NOT be open-sourced
+# Demo with my Exoskeleton Project 我的外骨骼项目示例 The source code for this project will NOT be open-sourced
 ![demo_exoskeleton](https://github.com/user-attachments/assets/c9d5dab1-6348-43e8-80ac-43bc81c67d14)
 
-# 在使用自己项目的模型时生成urdf与对应xml文件的过程是少不了的，然而自己生成的模型描述文件与开源的Unitree h1的可能会有差别。下面我会对我进行urdf文件生成的过程进行简单描述：
-# The process of generating URDF and XML files for your project’s model is essential. Compared to open-source models like Unitree H1, there might be differences in the model description files. Below is a step-by-step guide to creating a URDF file for your project:
+### 在使用自己项目的模型时生成urdf与对应xml文件的过程是少不了的，然而自己生成的模型描述文件与开源的Unitree h1的可能会有差别。下面我会对我进行urdf文件生成的过程进行简单描述： The process of generating URDF and XML files for your project’s model is essential. Compared to open-source models like Unitree H1, there might be differences in the model description files. Below is a step-by-step guide to creating a URDF file for your project:
 
-## 1.机械模型的设计与创建
-## Design and creation of the mechanical model
+## 1.机械模型的设计与创建 Design and creation of the mechanical model
 
 机械模型的设计与创建可以使用 Catia, Creo, UG, SolidWorks, Fusion360 等工业设计软件。这里推荐 SolidWorks 或 Fusion360，因为这两款软件的插件库里有支持装配文件转 urdf 文件的快捷插件。
 You can use industrial design software such as Catia, Creo, UG, SolidWorks, or Fusion360 for designing and creating the mechanical model. We recommend SolidWorks or Fusion360 because they have convenient plugins for exporting assembly files to URDF format.
     
 此项目中，我全程使用的是 Fusion360 进行零部件装配与导出。可以在 Fusion360 的官方插件库中搜索 “urdf” 关键词找到插件。安装完插件后如下：
 In this project, I used Fusion360 throughout for component assembly and export. You can find the plugin by searching for "urdf" in the Fusion360 official plugin library. After installation, it looks like this:
+
 <img width="342" alt="1" src="https://github.com/user-attachments/assets/22fac213-d48a-41db-b685-7b5022ca624b">
 
-## 2.装配模型时的注意事项
-## Precautions during model assembly
+## 2.装配模型时的注意事项 Precautions during model assembly
 
 模型的站立方向与世界坐标系的 Z 方向一致。
 Ensure the model's standing direction aligns with the Z-axis of the world coordinate system.
@@ -104,8 +99,7 @@ Each joint must have no more than 2 degrees of freedom. I used revolute joints t
 The completed assembly model looks like this:
 <img width="640" alt="2" src="https://github.com/user-attachments/assets/93994f0d-e353-479d-a936-fd8679d5493e">
 
-## 3.导出 URDF 文件
-## Export the URDF file
+## 3.导出 URDF 文件 Export the URDF file
 
 装配完成后，使用先前安装的插件导出 URDF 文件：
 After assembly, use the installed plugin to export the URDF file:
@@ -135,8 +129,8 @@ Locate the base component in the URDF file. Its name is typically base_link, but
 
 根基零件是所有其他零件的父级零件，决定了机器人相对于世界坐标系的位置和关系。
 The base component is the parent of all other components and determines the robot's position and relationship to the world coordinate system.
-删除根基零件的 <inertia> 部分，仅保留 <visual> 和 <collision> 部分。
-Remove the <inertia> section for the base component and retain only the <visual> and <collision> sections.
+**删除根基零件的 <inertia> 部分，仅保留 <visual> 和 <collision> 部分。
+Remove the <inertia> section for the base component and retain only the <visual> and <collision> sections.**
 如果未删除 <inertia>，RViz 无法加载该 URDF 文件。
 If <inertia> is not removed, RViz will fail to load the URDF file.
 
@@ -158,9 +152,9 @@ Use <contact> with <exclude> tags in the XML file to ignore abnormal collisions 
 手动添加根基零件的 <body> 标签
 默认情况下，URDF 转换生成的根基零件只有 <geom> 描述，而没有 <body> 标签。为了明确根基零件相对于世界坐标系的初始位置，您需要手动添加 <body> 标签，并将其设置为 6 自由度的 freejoint：
 By default, the URDF-to-XML conversion generates only a <geom> description for the base component without a <body> tag. To define the base component's initial position relative to the world coordinate system, manually add a <body> tag and set it as a 6-DOF freejoint:
-<body name="EB" pos="0 0 1.6">
-  <joint name="free_joint" type="free"/>
-</body>
+    <body name="EB" pos="0 0 1.6">
+      <joint name="free_joint" type="free"/>
+    </body>
 例如，在此项目中，其位置为 (0m, 0m, 1.6m)。
 In this project, its position is (0m, 0m, 1.6m).
 
