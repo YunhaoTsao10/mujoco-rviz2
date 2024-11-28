@@ -73,14 +73,18 @@ If this command has not been added to ~/.bashrc before:
 # Demo with my Exoskeleton Project 我的外骨骼项目示例 The source code for this project will NOT be open-sourced
 ![demo_exoskeleton](https://github.com/user-attachments/assets/c9d5dab1-6348-43e8-80ac-43bc81c67d14)
 
-### 在使用自己项目的模型时生成urdf与对应xml文件的过程是少不了的，然而自己生成的模型描述文件与开源的Unitree h1的可能会有差别。下面我会对我进行urdf文件生成的过程进行简单描述： The process of generating URDF and XML files for your project’s model is essential. Compared to open-source models like Unitree H1, there might be differences in the model description files. Below is a step-by-step guide to creating a URDF file for your project:
+### 在使用自己项目的模型时生成urdf与对应xml文件的过程是少不了的，然而自己生成的模型描述文件与开源的Unitree h1的可能会有差别。下面我会对我进行urdf文件生成的过程进行简单描述： 
+
+The process of generating URDF and XML files for your project’s model is essential. Compared to open-source models like Unitree H1, there might be differences in the model description files. Below is a step-by-step guide to creating a URDF file for your project:
 
 ## 1.机械模型的设计与创建 Design and creation of the mechanical model
 
 机械模型的设计与创建可以使用 Catia, Creo, UG, SolidWorks, Fusion360 等工业设计软件。这里推荐 SolidWorks 或 Fusion360，因为这两款软件的插件库里有支持装配文件转 urdf 文件的快捷插件。
+
 You can use industrial design software such as Catia, Creo, UG, SolidWorks, or Fusion360 for designing and creating the mechanical model. We recommend SolidWorks or Fusion360 because they have convenient plugins for exporting assembly files to URDF format.
     
 此项目中，我全程使用的是 Fusion360 进行零部件装配与导出。可以在 Fusion360 的官方插件库中搜索 “urdf” 关键词找到插件。安装完插件后如下：
+
 In this project, I used Fusion360 throughout for component assembly and export. You can find the plugin by searching for "urdf" in the Fusion360 official plugin library. After installation, it looks like this:
 
 <img width="342" alt="1" src="https://github.com/user-attachments/assets/22fac213-d48a-41db-b685-7b5022ca624b">
@@ -89,7 +93,7 @@ In this project, I used Fusion360 throughout for component assembly and export. 
 
 1. 模型的站立方向与世界坐标系的 Z 方向一致 Ensure the model's standing direction aligns with the Z-axis of the world coordinate system.
 2. 每一个关联关节不能有嵌套关系。链接方式必须是 a->b->c->d，不可以是 a->(b->c->d)。 Each joint connection must not have nested relationships. The linking must be a->b->c->d, not a->(b->c->d).
-3. 每个关节的自由度不能大于 2，自用全程采用 revolute joint。 Each joint must have no more than 2 degrees of freedom. I used revolute joints throughout.
+3. 每个关节的自由度不能大于 2，我全程采用 revolute joint。 Each joint must have no more than 2 degrees of freedom. I used revolute joints throughout.
 4. **重要！装配后的模型必须高于 Z0 平面，否则导出 URDF 文件时会报错。** **Critical! Ensure the assembled model is above the Z0 plane; otherwise, exporting to a URDF file will cause errors.**
    
 完成的装配模型大致如下：
@@ -105,47 +109,53 @@ After assembly, use the installed plugin to export the URDF file:
 ## 4. STL 文件转化与路径修改 (STL to DAE Conversion and Path Modification)
 
 导出 URDF 文件后，打开文件检查 filename 标签引用的文件路径。默认情况下，URDF 文件中引用的是 .stl 格式文件。
+
 After exporting the URDF file, open it and check the filename tag for referenced file paths. By default, the URDF file references .stl files.
 
 为了增强兼容性，需要将 meshes 文件夹中的 .stl 模型转换为 .dae 格式，同时在 URDF 文件中将对应路径更新为 .dae 文件路径。
+
 For better compatibility, convert the .stl models in the meshes folder to .dae format, and update the corresponding file paths in the URDF file to reference the .dae files.
 
 注意：保留原始的 .stl 模型文件，**不要删除**。后续 XML 文件需要使用这些 .stl 文件。可以使用工具（例如 Blender 或 Meshlab）完成文件格式转换和模型编辑，**Mujoco对于单个stl模型的要求是面数不能高于100000**。
+
 Note: Keep the original .stl model files; **do not delete them**. These .stl files will be required later for the XML file.
 You can use tools such as Blender or Meshlab for file format conversion and stl model editing, **Mujoco only allows a single stl model with faces fewer than 100000**.
 
 ## 5. 修改根基零件的惯性描述 (Modify Base Component's Inertia Description)
 
 找到 URDF 文件中的根基零件。它的名字通常是 base_link，但在您的项目中可能有其他命名，例如 "EB"。
+
 Locate the base component in the URDF file. Its name is typically base_link, but in your project, it might have a different name, such as "EB".
 
-关键点：
+关键点：根基零件是所有其他零件的父级零件，决定了机器人相对于世界坐标系的位置和关系。**删除根基零件的 <inertia> 部分，仅保留 <visual> 和 <collision> 部分。** 如果未删除 <inertia>，RViz 无法加载该 URDF 文件。
 
-根基零件是所有其他零件的父级零件，决定了机器人相对于世界坐标系的位置和关系。
 The base component is the parent of all other components and determines the robot's position and relationship to the world coordinate system.
-**删除根基零件的 <inertia> 部分，仅保留 <visual> 和 <collision> 部分。
-Remove the <inertia> section for the base component and retain only the <visual> and <collision> sections.**
-如果未删除 <inertia>，RViz 无法加载该 URDF 文件。
-If <inertia> is not removed, RViz will fail to load the URDF file.
+**Remove the <inertia> section for the base component and retain only the <visual> and <collision> sections.** If <inertia> is not removed, RViz will fail to load the URDF file.
 
 ## 6. 使用 Mujoco 转换为 XML 并添加控制器 (Convert to XML with Mujoco and Add Controllers)
 
 将修改完成的 URDF 文件通过 Mujoco 提供的 compile 脚本转换为 XML 文件：
+
 Use Mujoco's compile script to convert the modified URDF file into an XML file:
 
 <path_to_mujoco_bin>/compile <path_to_urdf_file> <output_xml_file>
+
 转换完成后，请按以下步骤完善 XML 文件：
+
 After conversion, complete the XML file with the following steps:
 
 ### 添加控制器 (<actuator>)
 为机器人模型的关节添加控制器（例如电机）。具体配置方法请参考 Mujoco 官方文档。
+
 Add actuators (e.g., motors) for the robot's joints. Refer to the Mujoco documentation for detailed configuration.
 
 ### 忽视间隙碰撞 (<contact exclude>)
 在 XML 文件中，可以通过 <contact> 标签使用 <exclude> 子标签忽视因模型间隙引发的非正常碰撞问题。
+
 Use <contact> with <exclude> tags in the XML file to ignore abnormal collisions caused by model gaps.
 手动添加根基零件的 <body> 标签
 默认情况下，URDF 转换生成的根基零件只有 <geom> 描述，而没有 <body> 标签。为了明确根基零件相对于世界坐标系的初始位置，您需要手动添加 <body> 标签，并将其设置为 6 自由度的 freejoint：
+
 By default, the URDF-to-XML conversion generates only a <geom> description for the base component without a <body> tag. To define the base component's initial position relative to the world coordinate system, manually add a <body> tag and set it as a 6-DOF freejoint:
 
 <img width="734" alt="截屏2024-11-28 20 27 17" src="https://github.com/user-attachments/assets/e480874c-8525-4a3a-931e-9661acf11472">
@@ -156,10 +166,10 @@ In this project, its position is (0m, 0m, 1.6m).
 
 ## 节点代码部分 (Node Code Section)
 
-pub_test 节点
+### pub_test 节点
 pub_test 节点的内容无需更改。
 No changes are required for the pub_test node.
-simulation 节点
+### simulation 节点
 simulation 节点需要注意以下事项：
 For the simulation node, ensure the following:
 发布的 /mujoco_joint_state 话题的数据结构（包括关节数量和名称）必须与 joint_state_publisher 节点发布的 /joint_state 话题完全一致。
