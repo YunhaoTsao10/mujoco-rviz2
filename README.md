@@ -87,14 +87,11 @@ In this project, I used Fusion360 throughout for component assembly and export. 
 
 ## 2.装配模型时的注意事项 Precautions during model assembly
 
-模型的站立方向与世界坐标系的 Z 方向一致。
-Ensure the model's standing direction aligns with the Z-axis of the world coordinate system.
-每一个关联关节不能有嵌套关系。链接方式必须是 a->b->c->d，不可以是 a->(b->c->d)。
-Each joint connection must not have nested relationships. The linking must be a->b->c->d, not a->(b->c->d).
-每个关节的自由度不能大于 2，自用全程采用 revolute joint。
-Each joint must have no more than 2 degrees of freedom. I used revolute joints throughout.
-**重要！装配后的模型必须高于 Z0 平面，否则导出 URDF 文件时会报错。**
-**Critical! Ensure the assembled model is above the Z0 plane; otherwise, exporting to a URDF file will cause errors.**
+1. 模型的站立方向与世界坐标系的 Z 方向一致 Ensure the model's standing direction aligns with the Z-axis of the world coordinate system.
+2. 每一个关联关节不能有嵌套关系。链接方式必须是 a->b->c->d，不可以是 a->(b->c->d)。 Each joint connection must not have nested relationships. The linking must be a->b->c->d, not a->(b->c->d).
+3. 每个关节的自由度不能大于 2，自用全程采用 revolute joint。 Each joint must have no more than 2 degrees of freedom. I used revolute joints throughout.
+4. **重要！装配后的模型必须高于 Z0 平面，否则导出 URDF 文件时会报错。** **Critical! Ensure the assembled model is above the Z0 plane; otherwise, exporting to a URDF file will cause errors.**
+   
 完成的装配模型大致如下：
 The completed assembly model looks like this:
 <img width="640" alt="2" src="https://github.com/user-attachments/assets/93994f0d-e353-479d-a936-fd8679d5493e">
@@ -113,11 +110,8 @@ After exporting the URDF file, open it and check the filename tag for referenced
 为了增强兼容性，需要将 meshes 文件夹中的 .stl 模型转换为 .dae 格式，同时在 URDF 文件中将对应路径更新为 .dae 文件路径。
 For better compatibility, convert the .stl models in the meshes folder to .dae format, and update the corresponding file paths in the URDF file to reference the .dae files.
 
-注意：
-
-保留原始的 .stl 模型文件，**不要删除**。后续 XML 文件需要使用这些 .stl 文件。
+注意：保留原始的 .stl 模型文件，**不要删除**。后续 XML 文件需要使用这些 .stl 文件。可以使用工具（例如 Blender 或 Meshlab）完成文件格式转换和模型编辑，**Mujoco对于单个stl模型的要求是面数不能高于100000**。
 Note: Keep the original .stl model files; **do not delete them**. These .stl files will be required later for the XML file.
-可以使用工具（例如 Blender 或 Meshlab）完成文件格式转换和模型编辑，**Mujoco对于单个stl模型的要求是面数不能高于100000**。
 You can use tools such as Blender or Meshlab for file format conversion and stl model editing, **Mujoco only allows a single stl model with faces fewer than 100000**.
 
 ## 5. 修改根基零件的惯性描述 (Modify Base Component's Inertia Description)
