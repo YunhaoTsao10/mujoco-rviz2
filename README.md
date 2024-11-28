@@ -94,7 +94,7 @@ In this project, I used Fusion360 throughout for component assembly and export. 
 1. 模型的站立方向与世界坐标系的 Z 方向一致     Ensure the model's standing direction aligns with the Z-axis of the world coordinate system.
 2. 每一个关联关节不能有嵌套关系。链接方式必须是 a->b->c->d，不可以是 a->(b->c->d)。     Each joint connection must not have nested relationships. The linking must be a->b->c->d, not a->(b->c->d).
 3. 每个关节的自由度不能大于 2，我全程采用 revolute joint。     Each joint must have no more than 2 degrees of freedom. I used revolute joints throughout.
-4. **重要！装配后的模型必须高于 Z0 平面，否则导出 URDF 文件时会报错。    ** **Critical! Ensure the assembled model is above the Z0 plane; otherwise, exporting to a URDF file will cause errors.**
+4. **重要！装配后的模型必须高于 Z0 平面，否则导出 URDF 文件时会报错。**     **Critical! Ensure the assembled model is above the Z0 plane; otherwise, exporting to a URDF file will cause errors.**
    
 完成的装配模型大致如下：
 The completed assembly model looks like this:
