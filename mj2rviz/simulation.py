@@ -73,7 +73,8 @@ class H1MujocoController(Node):
                 lambda msg, j=joint_name: self.set_joint_target(j, msg.data), 10)
 
         # Set up a ROS timer for updating simulation
-        self.timer = self.create_timer(0.1, self.update)
+        # self.timer = self.create_timer(0.1, self.update)
+        self.timer = self.create_timer(self.model.opt.timestep, self.update)
         
     def set_joint_target(self, joint_name, target_position):
         """Set target position for a specific joint."""
@@ -90,7 +91,8 @@ class H1MujocoController(Node):
         self.get_logger().warn(f"No actuator found for Joint {joint_name}")
         
     '''以下是老版本的给关节发送控制命令的代码，但是在控制关节与关节名称的顺序不一致时会出现问题
-    	down below is the old version, bug occurs when the order in ctrl[] is not in consistence with joint_name    
+    	Down below is the old version, bug occurs when the order in ctrl[] is not in consistence with joint_name  
+     
     def set_joint_target(self, joint_name, target_position):
         """Set target position for a specific joint."""
         joint_id = mujoco.mj_name2id(self.model, mujoco.mjtObj.mjOBJ_JOINT, joint_name)
@@ -148,6 +150,7 @@ class H1MujocoController(Node):
     def update(self):
         """Update simulation environment and publish joint states."""
         mujoco.mj_step(self.model, self.data)
+        self.viewer.sync()
         # self.get_logger().info(f"Updated qpos: {self.data.qpos[:self.model.nq].tolist()}")
         self.publish_joint_states()
         self.publish_combined_tf()
@@ -204,7 +207,7 @@ class H1MujocoController(Node):
 
         return correct_positions, correct_velocities
 
-
+    # The render_loop method DOWNBELOW is not more needed for parallel computing for we used launch_passive method for Mujoco
     def render_loop(self):
         # start = time.time()
         while rclpy.ok() and self.viewer.is_running():
@@ -220,8 +223,8 @@ def main(args=None):
     h1_controller = H1MujocoController()
 
     # Start MuJoCo rendering in a separate thread
-    render_thread = threading.Thread(target=h1_controller.render_loop)
-    render_thread.start()
+    # render_thread = threading.Thread(target=h1_controller.render_loop)
+    # render_thread.start()
 
     # Spin the ROS 2 node in the main thread
     rclpy.spin(h1_controller)
