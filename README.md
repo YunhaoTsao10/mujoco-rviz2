@@ -68,10 +68,11 @@ If this command has not been added to ~/.bashrc before:
 ![rosgraph](https://github.com/user-attachments/assets/e8f3aba1-f23f-4146-bda1-f0f6779cb85b)
 
 # Demo with Unitree H1 宇树h1示例
-![demo](https://github.com/user-attachments/assets/6b5b5a60-3bc3-4cb6-b123-2d8a5c511551)
+![uni](https://github.com/user-attachments/assets/f077c1fb-4d2a-4735-94b9-fe90219aef8c)
 
 # Demo with my Exoskeleton Project 我的外骨骼项目示例 The source code for this project will NOT be open-sourced
-![demo_exoskeleton](https://github.com/user-attachments/assets/c9d5dab1-6348-43e8-80ac-43bc81c67d14)
+![exo](https://github.com/user-attachments/assets/223cfe22-d198-4dd0-92d1-8bbef3944406)
+
 
 ### 在使用自己项目的模型时生成urdf与对应xml文件的过程是少不了的，然而自己生成的模型描述文件与开源的Unitree h1的可能会有差别。下面我会对我进行urdf文件生成的过程进行简单描述： 
 
